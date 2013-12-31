@@ -18,11 +18,11 @@ return array(
 			),
 		),
 		'db'=>array(
-			'connectionString' => 'mysql:host='.HTTP_BAE_ENV_ADDR_SQL_IP.';port='.HTTP_BAE_ENV_ADDR_SQL_PORT.';dbname=pwpilCUMsyUBywjwIeyG',
-			'tablePrefix' => 'weixin_',
+			'connectionString' => 'mysql:host='.HOST.';port='.PORT.';dbname='.DBNAME,
+			'tablePrefix' => TABLE_PREFIX,
 			'emulatePrepare' => true,
-			'username' => HTTP_BAE_ENV_AK,
-			'password' => HTTP_BAE_ENV_SK,
+			'username' => USERNAME,
+			'password' => PASSWORD,
 			'charset' => 'utf8',
 		),
 		'errorHandler'=>array(
