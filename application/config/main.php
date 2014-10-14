@@ -1,4 +1,10 @@
 <?php
+define('HOST', 'localhost');
+define('PORT', 3306);
+define('DBNAME', 'demo');
+define('TABLE_PREFIX', 'demo_');
+define('USERNAME', 'demo');
+define('PASSWORD', 'demo');
 return array(
 	'name'=>'Cooler Framework',
 

@@ -1,16 +1,14 @@
 <?php
 class SiteController extends CController
 {
-	public function action()
+	public function index()
 	{
-		return array(
-			'page' => C
-		
-		);
+		print 222;
 	}
 	
 	public function site()
 	{
 		print 11;
 	}
+	
 }

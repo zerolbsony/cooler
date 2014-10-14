@@ -9,6 +9,7 @@ class Base
 {
 	public static $classMap=array();//特殊类配置(非通用路径下)
 	public static $enableIncludePath=true;
+	private static $_imports=array();
 	
 	/**
 	 * 加载非通用路径下的类

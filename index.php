@@ -12,6 +12,8 @@ define('LIBS', ROOT_PATH.DIRECTORY_SEPARATOR.'libs');
 define('_SEPARATOR', '_');//路由分割符
 define('DEBUG', true);//使用环境test(测试)、production(生产)
 define('CONFIG', APPLICATION.DIRECTORY_SEPARATOR.'config');
+define('ENABLE_EXCEPTION_HANDLER', true);
+define('ENABLE_ERROR_HANDLER', true);
 
 require FRAMEWORK.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'Base.php';
 require FRAMEWORK.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'Bootstrap.php';
