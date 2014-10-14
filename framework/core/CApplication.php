@@ -2,19 +2,14 @@
 class CApplication extends CComponent
 {
 	public $_requestUri = '';
-	
-	public function __construct()
-	{
-		$this->init();
-	}
-	
-	protected function init()
-	{
-		set_exception_handler(array($this,'handleException'));//注册异常钩子
-	}
+	public $defaultController = 'SiteController';
+	public $defaultAction = 'index';
+	//cache for the controller is matched via url
+	public $controllerMap = array();
 	
 	public function run()
 	{
+		$this->initHandlers();
 		$application = self::createComponent(get_class());
 		$route = $application->parseRequest();
 		self::runController($route);
@@ -22,7 +17,12 @@ class CApplication extends CComponent
 	
 	private function parseRequest()
 	{
-		return self::getComponent('CUrlManager')->parseUrl(self::$_instance[get_class()]);
+		return $this->getUrlManager()->parseUrl(self::$_instance[get_class()]);
+	}
+	
+	private function getUrlManager()
+	{
+		return self::getComponent('CUrlManager');
 	}
 	
 	public function getRequestUri()
@@ -50,16 +50,31 @@ class CApplication extends CComponent
 			$controller->run($actionID);
 			$this->_controller=$oldController;
 		} else
-			throw new CException(404);
+			throw new CHttpException(404);
 	}
 	
 	public function createController($route)
 	{
+		if(($route=trim($route,'/')) === '')
+			$route = $this->defaultController;
+		$caseSensitive = $this->getUrlManager()->caseSensitive;
+		$route .= '/';
 		while(($pos=strpos($route,'/')) !== false)
 		{
 			$id = substr($route, 0, $pos);
+			if(!preg_match('/^\w+$/', $id))
+				return null;
+			if(!$caseSensitive)
+				$id = strtolower($id);
+			$route = (string)substr($route, $pos+1);
 			$className = ucfirst($id).'Controller';
 			$classFile = APPLICATION.DIRECTORY_SEPARATOR.'control'.DIRECTORY_SEPARATOR.$className.'.php';
+			if(isset($this->controllerMap[$id])){
+				return array(
+					self::createComponent($this->controllerMap[$id]),
+					$this->parseActionParams($route),
+				);
+			}
 			if(is_file($classFile)){
 				if(!class_exists($className,false)){
 					require $classFile;
@@ -67,13 +82,13 @@ class CApplication extends CComponent
 				if(class_exists($className,false) && is_subclass_of($className,'CController')){
 					$id[0]=strtolower($id[0]);
 					return array(
-						new $className($id),
+						new $className,
 						$this->parseActionParams($route),
 					);
 				}
 			}
-			return null;
 		}
+		return null;
 	}
 	
 	private function parseActionParams($pathInfo)
@@ -86,28 +101,39 @@ class CApplication extends CComponent
 			return $manager->caseSensitive ? $actionID : strtolower($actionID);
 		}
 		else
-			return $pathInfo;
+			return $this->defaultAction;
 	}
 	
-	public function handleException($exception)
+	protected function initHandlers()
 	{
+		if(ENABLE_EXCEPTION_HANDLER)
+			set_exception_handler(array($this, 'handlerException'));
+		/*if(ENABLE_ERROR_HANDLER)
+			set_error_handler(array($this,'handlerError'),error_reporting());*/
+	}
+	
+	/**
+	 * 捕获异常钩子
+	 * @param unknown_type $exception
+	 */
+	public function handlerException($exception)
+	{
+		restore_error_handler();
 		restore_exception_handler();
-
-		$this->displayException($exception);
+		/*if(!headers_sent())
+			header("HTTP/1.0 ".$exception->statusCode." ".$exception->getHttpHeader($exception->statusCode, get_class($exception)));*/
+			
+		echo $exception->getTraceAsString();
 	}
 	
-	public function displayException($exception)
+	/**
+	 * 捕获错误钩子
+	 * @param unknown_type $exception
+	 */
+	public function handlerError()
 	{
-		if(DEBUG)
-		{
-			echo '<h1>'.get_class($exception)."</h1>\n";
-			echo '<p>'.$exception->getMessage().' ('.$exception->getFile().':'.$exception->getLine().')</p>';
-			echo '<pre>'.$exception->getTraceAsString().'</pre>';
-		}
-		else
-		{
-			echo '<h1>'.get_class($exception)."</h1>\n";
-			echo '<p>'.$exception->getMessage().'</p>';
-		}
+		restore_error_handler();
+		restore_exception_handler();
+		print debug_backtrace();
 	}
 }

@@ -101,19 +101,14 @@ class Base
 	}
 	
 	/**
-	 * 创建程序
+	 * 自定义自动加载对象
 	 * @author nero
-	 * @param string $config 配置
-	 * @return object
+	 * @param string $className 类名称
+	 * @return boolean
 	 */
 	public static function createApplication($config=null)
 	{
 		return new CApplication($config);
-	}
-	
-	public static function createComponent()
-	{
-		return CComponent::createComponent();
 	}
 	
 	/**
@@ -195,6 +190,7 @@ class Base
 		'CController' => '/core/CController.php',
 		'CError' => '/core/CError.php',
 		'CException' => '/core/CException.php',
+		'CHttpException' => '/core/CHttpException.php',
 		'CEvent' => '/core/CEvent.php',
 		'CModel' => '/core/CModel.php',
 		'CMoudle' => '/core/CMoudle.php',

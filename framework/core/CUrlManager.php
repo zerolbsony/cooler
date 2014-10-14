@@ -6,6 +6,7 @@ class CUrlManager extends CComponent
 	
 	private $routeVar = 'r';
 	private $_parseType = self::TYPE_GET;
+	public $caseSensitive = true;
 	
 	public function parseUrl($request)
 	{
