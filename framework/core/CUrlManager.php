@@ -40,8 +40,8 @@ class CUrlManager extends CComponent
 				return '';
 		} elseif ($this->urlFormat == self::FORMAT_PATH) {
 			if((trim($_SERVER['REQUEST_URI'], '/') == ''))
-				header('Location: '.$config['urlManager']['rules']['home']);
-			return $_SERVER['REQUEST_URI'];//未完待续
+				header('Location: '.$this->rules['home']);
+			return $_SERVER['REQUEST_URI'];
 		}
 		
 		return '';
