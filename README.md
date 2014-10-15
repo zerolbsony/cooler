@@ -12,7 +12,7 @@ cooler
   通过修改http web server的conf文件来支持rewrite，则可以通过配置host指定域名来直接访问。
   
  Apache配置文件(http-vhosts.conf):
-<code>
+<pre><code>
  <VirtualHost *:80>
     ServerAdmin 邮箱
     DocumentRoot "项目地址"
@@ -33,9 +33,9 @@ cooler
 	RewriteRule . index.php
     </Directory>
  </VirtualHost>
-</code>
+</code></pre>
  Nginx配置文件(nginx.conf):
-<code>
+<pre><code>
  server {
  	listen  80;
  	server_name  域名
@@ -63,4 +63,4 @@ cooler
  		include       fastcgi_params;
  	}
  }
- </code>
+ </code></pre>
