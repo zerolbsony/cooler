@@ -1,29 +1,41 @@
 <?php
 class CUrlManager extends CComponent
 {	
-	const TYPE_PATH = 'path';
-	const TYPE_GET = 'get';
+	const FORMAT_PATH = 'path';
+	const FORMAT_GET = 'get';
 	
 	private $routeVar = 'r';
-	private $_parseType = self::TYPE_GET;
+	private $urlFormat = self::FORMAT_GET;
+	private $showScriptName = false;
 	public $caseSensitive = true;
+	
+	public function __construct()
+	{
+		$this->init();
+	}
+	
+	private function init()
+	{
+		$config = Base::app()->getConfig('components');
+		foreach($config['urlManager'] as $key => $value)
+			$this->$key = $value;
+	}
 	
 	public function parseUrl($request)
 	{
-		$config = Base::app()->getConfig('components');
-		if ($this->_parseType == self::TYPE_GET) {
+		if ($this->urlFormat == self::FORMAT_GET) {
 			if((trim($_SERVER['REQUEST_URI'], '/') == ''))
-				header('Location: ?'.$this->routeVar.'='.$config['urlManager']['rules']['home']);
+				header('Location: ?'.$this->routeVar.'='.$this->rules['home']);
 			if ( isset($_GET[$this->routeVar]) ){
 				return $_GET[$this->routeVar];
 			} elseif ( isset($_POST[$this->routeVar]) ) {
 				return $_POST[$this->routeVar];
 			} else 
 				return '';
-		} elseif ($this->_parseType == self::TYPE_PATH) {
+		} elseif ($this->urlFormat == self::FORMAT_PATH) {
 			if((trim($_SERVER['REQUEST_URI'], '/') == ''))
 				header('Location: '.$config['urlManager']['rules']['home']);
-			return ;//未完待续
+			return $_SERVER['REQUEST_URI'];//未完待续
 		}
 		
 		return '';

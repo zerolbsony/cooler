@@ -18,6 +18,7 @@ return array(
 		),
 		'urlManager'=>array(
 			'urlFormat'=>'path',
+			'routeVar'=>'r',
 			'showScriptName'=>false,
 			'rules'=>array(
 				'home' => 'site/index',
