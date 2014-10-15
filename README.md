@@ -13,7 +13,7 @@ cooler
   
  Apache配置文件(http-vhosts.conf):
 <pre><code>
- <VirtualHost *:80>
+ < VirtualHost *:80>
     ServerAdmin 邮箱
     DocumentRoot "项目地址"
     ServerName 域名
@@ -32,7 +32,7 @@ cooler
 
 	RewriteRule . index.php
     </Directory>
- </VirtualHost>
+ </ VirtualHost>
 </code></pre>
  Nginx配置文件(nginx.conf):
 <pre><code>
