@@ -9,6 +9,7 @@ class Base
 {
 	public static $classMap=array();//特殊类配置(非通用路径下)
 	public static $enableIncludePath=true;
+	private static $_app;
 	private static $_imports=array();
 	
 	/**
@@ -110,6 +111,19 @@ class Base
 	public static function createApplication($config=null)
 	{
 		return new CApplication($config);
+	}
+	
+	public static function app()
+	{
+		return self::$_app;
+	}
+	
+	public static function setApplication($app)
+	{
+		if(self::$_app === null || $app === null)
+			self::$_app = $app;
+		else
+			throw new CException('application can only be created once.');
 	}
 	
 	/**

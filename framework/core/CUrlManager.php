@@ -10,7 +10,10 @@ class CUrlManager extends CComponent
 	
 	public function parseUrl($request)
 	{
+		$config = Base::app()->getConfig('components');
 		if ($this->_parseType == self::TYPE_GET) {
+			if((trim($_SERVER['REQUEST_URI'], '/') == ''))
+				header('Location: ?'.$this->routeVar.'='.$config['urlManager']['rules']['home']);
 			if ( isset($_GET[$this->routeVar]) ){
 				return $_GET[$this->routeVar];
 			} elseif ( isset($_POST[$this->routeVar]) ) {
@@ -18,6 +21,8 @@ class CUrlManager extends CComponent
 			} else 
 				return '';
 		} elseif ($this->_parseType == self::TYPE_PATH) {
+			if((trim($_SERVER['REQUEST_URI'], '/') == ''))
+				header('Location: '.$config['urlManager']['rules']['home']);
 			return ;//未完待续
 		}
 		

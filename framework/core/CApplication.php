@@ -7,17 +7,36 @@ class CApplication extends CComponent
 	//cache for the controller is matched via url
 	public $controllerMap = array();
 	
+	public function __construct($config=null)
+	{
+		Base::setApplication($this);
+
+		// set basePath at early as possible to avoid trouble
+		if(is_string($config))
+			$config=require($config);
+
+		//$this->preinit();
+
+		$this->initHandlers();
+		//$this->registerCoreComponents();
+
+		$this->configure($config);
+		//$this->attachBehaviors($this->behaviors);
+		//$this->preloadComponents();
+
+		//$this->init();
+	}
+	
 	public function run()
 	{
-		$this->initHandlers();
-		$application = self::createComponent(get_class());
+		$application = Base::app();
 		$route = $application->parseRequest();
 		self::runController($route);
 	}
 	
 	private function parseRequest()
 	{
-		return $this->getUrlManager()->parseUrl(self::$_instance[get_class()]);
+		return $this->getUrlManager()->parseUrl(Base::app());
 	}
 	
 	private function getUrlManager()
@@ -67,6 +86,8 @@ class CApplication extends CComponent
 			if(!$caseSensitive)
 				$id = strtolower($id);
 			$route = (string)substr($route, $pos+1);
+//			if(empty($route))
+//				$route = $this->defaultAction;
 			$className = ucfirst($id).'Controller';
 			$classFile = APPLICATION.DIRECTORY_SEPARATOR.'control'.DIRECTORY_SEPARATOR.$className.'.php';
 			if(isset($this->controllerMap[$id])){
@@ -123,6 +144,7 @@ class CApplication extends CComponent
 		/*if(!headers_sent())
 			header("HTTP/1.0 ".$exception->statusCode." ".$exception->getHttpHeader($exception->statusCode, get_class($exception)));*/
 			
+		//echo $exception->getMessage();exit;
 		echo $exception->getTraceAsString();
 	}
 	
@@ -135,5 +157,19 @@ class CApplication extends CComponent
 		restore_error_handler();
 		restore_exception_handler();
 		print debug_backtrace();
+	}
+	
+	public function configure($config)
+	{
+		if(is_array($config))
+		{
+			foreach($config as $key=>$value)
+				$this->$key=$value;
+		}
+	}
+	
+	public function getConfig($type)
+	{
+		return $this->$type;
 	}
 }
