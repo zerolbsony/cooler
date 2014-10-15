@@ -1,4 +1,10 @@
 <?php
+/**
+ * Url管理器
+ * @desc 主要执行url解析任务
+ * @author nero
+ * @date 2013/9/20
+ */
 class CUrlManager extends CComponent
 {	
 	const FORMAT_PATH = 'path';

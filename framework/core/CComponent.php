@@ -1,4 +1,9 @@
 <?php
+/**
+ * 抽象组件基类
+ * @author nero
+ * @date 2013/9/20
+ */
 abstract class CComponent
 {
 	protected static $_instance;//数组

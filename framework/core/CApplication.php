@@ -1,4 +1,10 @@
 <?php
+/**
+ * 程序运行入口类
+ * @desc 通过引导器执行run来触发路由协议并最终执行控制器
+ * @author nero
+ * @date 2013/9/20
+ */
 class CApplication extends CComponent
 {
 	public $_requestUri = '';

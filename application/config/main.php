@@ -1,4 +1,9 @@
 <?php
+/**
+ * 程序入口类要加载的配置文件
+ * @author nero
+ * @date 2013/9/20
+ */
 define('HOST', 'localhost');
 define('PORT', 3306);
 define('DBNAME', 'demo');
