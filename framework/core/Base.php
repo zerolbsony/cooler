@@ -103,21 +103,34 @@ class Base
 	}
 	
 	/**
-	 * 自定义自动加载对象
+	 * 创建CApplication实例
 	 * @author nero
-	 * @param string $className 类名称
-	 * @return boolean
+	 * @param string $config 要加载的站点配置文件路径
+	 * @return object
 	 */
 	public static function createApplication($config=null)
 	{
-		return new CApplication($config);
+		if(self::$_app === null)
+			return new CApplication($config);
+		else
+			return self::app();
 	}
 	
+	/**
+	 * 获取CApplication实例
+	 * @author nero
+	 * @return object
+	 */
 	public static function app()
 	{
 		return self::$_app;
 	}
 	
+	/**
+	 * 设置CApplication实例,做了单例,防止重复
+	 * @author nero
+	 * @return object
+	 */
 	public static function setApplication($app)
 	{
 		if(self::$_app === null || $app === null)
